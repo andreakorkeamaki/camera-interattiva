@@ -118,10 +118,8 @@ resetButton.addEventListener("click", () => {
 
 zoomInButton.addEventListener("click", () => adjustZoom(-0.12));
 zoomOutButton.addEventListener("click", () => adjustZoom(0.12));
-enterArButton.addEventListener("click", async () => {
-  if (typeof viewer.activateAR === "function") {
-    await viewer.activateAR();
-  }
+enterArButton.addEventListener("click", () => {
+  window.location.href = "./ar.html";
 });
 
 viewer.addEventListener("load", () => {
@@ -129,8 +127,4 @@ viewer.addEventListener("load", () => {
   viewer.cameraOrbit = defaultView.orbit;
   viewer.fieldOfView = defaultView.fov;
   focusPoi("obbiettivo");
-
-  if ("canActivateAR" in viewer) {
-    enterArButton.hidden = !viewer.canActivateAR;
-  }
 });

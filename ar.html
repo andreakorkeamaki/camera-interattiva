@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Camera Interattiva AR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./ar.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="ar-shell" id="ar-overlay">
+        <header class="ar-topbar">
+          <a class="back-link" href="./index.html">Torna al viewer</a>
+          <div class="session-pill" id="session-pill">AR pronta</div>
+        </header>
+
+        <section class="ar-card intro-card" id="intro-card">
+          <p class="eyebrow">WebXR AR</p>
+          <h1>Posiziona la fotocamera nel tuo spazio</h1>
+          <p>
+            Tocca <strong>Avvia AR</strong>, inquadra il pavimento e poi tocca per
+            appoggiare il modello. Le etichette restano direttamente in 3D.
+          </p>
+          <div id="ar-button-host"></div>
+        </section>
+
+        <section class="ar-card hint-card" id="hint-card">
+          <p id="status-text">
+            Muovi lentamente il telefono per rilevare una superficie.
+          </p>
+        </section>
+
+        <aside class="ar-card info-card is-hidden" id="info-card" aria-live="polite">
+          <p class="eyebrow" id="info-kicker">Punto selezionato</p>
+          <h2 id="info-title">Obbiettivo</h2>
+          <p id="info-description"></p>
+          <div class="info-tags">
+            <span id="info-tag-1"></span>
+            <span id="info-tag-2"></span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <script type="module" src="./ar.js"></script>
+  </body>
+</html>

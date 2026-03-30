@@ -82,8 +82,7 @@ h1 {
 .ghost-button,
 .toolbar-button,
 .poi-card,
-.hotspot,
-.ar-launch-button {
+.hotspot {
   border: 1px solid var(--line);
   border-radius: 999px;
   background: rgba(255, 250, 242, 0.85);
@@ -109,10 +108,8 @@ h1 {
 .toolbar-button:hover,
 .poi-card:hover,
 .hotspot:hover,
-.ar-launch-button:hover,
 .poi-card:focus-visible,
 .hotspot:focus-visible,
-.ar-launch-button:focus-visible,
 .toolbar-button:focus-visible,
 .ghost-button:focus-visible {
   transform: translateY(-1px);
@@ -195,32 +192,6 @@ model-viewer {
   font-weight: 700;
 }
 
-.ar-launch-button {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  padding: 12px 20px;
-  box-shadow: 0 16px 36px rgba(65, 47, 25, 0.2);
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.ar-help {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  top: 16px;
-  padding: 10px 14px;
-  border-radius: 16px;
-  background: rgba(27, 26, 23, 0.78);
-  color: #fffaf5;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  text-align: center;
-  backdrop-filter: blur(8px);
-}
-
 .hotspot.is-active {
   background: var(--brand);
   color: #fffaf5;
@@ -298,14 +269,6 @@ model-viewer {
   color: rgba(255, 250, 245, 0.85);
 }
 
-model-viewer[ar-status="session-started"] .ar-launch-button {
-  display: none;
-}
-
-model-viewer:not([ar-status="session-started"]) .ar-help {
-  display: none;
-}
-
 @media (max-width: 980px) {
   .hero,
   .viewer-toolbar {
@@ -346,8 +309,4 @@ model-viewer:not([ar-status="session-started"]) .ar-help {
     font-size: 0.78rem;
   }
 
-  .ar-launch-button {
-    bottom: 14px;
-    width: calc(100% - 28px);
-  }
 }
