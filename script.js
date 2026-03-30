@@ -7,6 +7,7 @@ const panelDetail2 = document.querySelector("#panel-detail-2");
 const resetButton = document.querySelector("#reset-view");
 const zoomInButton = document.querySelector("#zoom-in");
 const zoomOutButton = document.querySelector("#zoom-out");
+const enterArButton = document.querySelector("#enter-ar");
 
 const hotspots = [...document.querySelectorAll("[data-hotspot]")];
 const poiCards = [...document.querySelectorAll("[data-poi-trigger]")];
@@ -117,10 +118,19 @@ resetButton.addEventListener("click", () => {
 
 zoomInButton.addEventListener("click", () => adjustZoom(-0.12));
 zoomOutButton.addEventListener("click", () => adjustZoom(0.12));
+enterArButton.addEventListener("click", async () => {
+  if (typeof viewer.activateAR === "function") {
+    await viewer.activateAR();
+  }
+});
 
 viewer.addEventListener("load", () => {
   viewer.cameraTarget = defaultView.target;
   viewer.cameraOrbit = defaultView.orbit;
   viewer.fieldOfView = defaultView.fov;
   focusPoi("obbiettivo");
+
+  if ("canActivateAR" in viewer) {
+    enterArButton.hidden = !viewer.canActivateAR;
+  }
 });
