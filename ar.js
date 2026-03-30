@@ -5,9 +5,11 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const overlayRoot = document.querySelector("#ar-overlay");
 const introCard = document.querySelector("#intro-card");
 const hintCard = document.querySelector("#hint-card");
+const supportCard = document.querySelector("#support-card");
 const infoCard = document.querySelector("#info-card");
 const sessionPill = document.querySelector("#session-pill");
 const statusText = document.querySelector("#status-text");
+const supportText = document.querySelector("#support-text");
 const infoKicker = document.querySelector("#info-kicker");
 const infoTitle = document.querySelector("#info-title");
 const infoDescription = document.querySelector("#info-description");
@@ -54,6 +56,7 @@ const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
 renderer.xr.enabled = true;
 document.body.appendChild(renderer.domElement);
 
@@ -97,6 +100,13 @@ let modelPlaced = false;
 function updateStatus(message, sessionState = "AR pronta") {
   statusText.textContent = message;
   sessionPill.textContent = sessionState;
+}
+
+function showSupportMessage(message, sessionState = "Non supportato") {
+  supportText.textContent = message;
+  supportCard.classList.remove("is-hidden");
+  hintCard.classList.add("is-hidden");
+  updateStatus(message, sessionState);
 }
 
 function showInfo(key) {
@@ -268,24 +278,42 @@ function createArButton() {
 }
 
 async function checkSupport() {
-  if (!navigator.xr) {
-    updateStatus("Questo dispositivo o browser non supporta WebXR AR.", "Non supportato");
+  const ua = navigator.userAgent || "";
+  const isAndroid = /Android/i.test(ua);
+  const isChrome = /Chrome/i.test(ua) && !/Edg|OPR|SamsungBrowser/i.test(ua);
+
+  if (!isAndroid || !isChrome) {
+    showSupportMessage("Questa AR custom funziona in modo affidabile con Chrome su Android. Apri il link li' e riprova.");
     return;
   }
 
-  const supported = await navigator.xr.isSessionSupported("immersive-ar");
+  if (!navigator.xr) {
+    showSupportMessage("Questo browser non espone WebXR AR. Usa Chrome aggiornato su Android.");
+    return;
+  }
+
+  let supported = false;
+  try {
+    supported = await navigator.xr.isSessionSupported("immersive-ar");
+  } catch {
+    showSupportMessage("Non sono riuscito a verificare il supporto AR del browser.");
+    return;
+  }
+
   if (!supported) {
-    updateStatus("WebXR AR non disponibile qui. Prova con Chrome su Android.", "Non supportato");
+    showSupportMessage("WebXR immersive-ar non disponibile. Prova con Chrome su Android e permessi camera attivi.");
     return;
   }
 
   createArButton();
+  supportCard.classList.add("is-hidden");
   updateStatus("Tocca Avvia AR per iniziare.", "AR pronta");
 }
 
 renderer.xr.addEventListener("sessionstart", () => {
   introCard.classList.add("is-hidden");
   hintCard.classList.remove("is-hidden");
+  supportCard.classList.add("is-hidden");
   infoCard.classList.add("is-hidden");
   updateStatus("Muovi il telefono per trovare una superficie.", "Sessione AR");
 });
@@ -306,11 +334,16 @@ function render(timestamp, frame) {
     const session = renderer.xr.getSession();
 
     if (!hitTestSourceRequested) {
-      session.requestReferenceSpace("viewer").then((referenceSpace) => {
-        session.requestHitTestSource({ space: referenceSpace }).then((source) => {
-          hitTestSource = source;
+      session
+        .requestReferenceSpace("viewer")
+        .then((referenceSpace) => {
+          session.requestHitTestSource({ space: referenceSpace }).then((source) => {
+            hitTestSource = source;
+          });
+        })
+        .catch(() => {
+          showSupportMessage("Il browser ha avviato l'AR ma non supporta l'hit-test necessario per posizionare il modello.", "Errore AR");
         });
-      });
 
       session.addEventListener("end", () => {
         hitTestSourceRequested = false;

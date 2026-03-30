@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Camera Interattiva AR per iPhone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      body {
+        min-height: 100vh;
+      }
+
+      .ios-shell {
+        width: min(1100px, calc(100% - 24px));
+        margin: 0 auto;
+        padding: 22px 0 32px;
+      }
+
+      .ios-note {
+        margin-bottom: 16px;
+        padding: 16px 18px;
+        border-radius: 20px;
+        background: rgba(27, 26, 23, 0.84);
+        color: #fffaf5;
+        line-height: 1.6;
+        box-shadow: var(--shadow);
+      }
+
+      .ios-note p {
+        margin: 0;
+      }
+
+      .ios-ar-viewer {
+        position: relative;
+        border-radius: 28px;
+        overflow: hidden;
+        background: rgba(255, 251, 244, 0.82);
+        box-shadow: var(--shadow);
+      }
+
+      .ios-ar-viewer model-viewer {
+        height: min(72vh, 760px);
+      }
+
+      .ios-ar-button {
+        position: absolute;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        padding: 14px 22px;
+        border-radius: 999px;
+        border: none;
+        background: linear-gradient(135deg, var(--brand), #e68c4f);
+        color: #fffaf5;
+        font: inherit;
+        font-weight: 700;
+        box-shadow: 0 16px 36px rgba(65, 47, 25, 0.2);
+      }
+
+      .ios-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.9fr);
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .ios-info {
+        padding: 24px;
+        border-radius: 24px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .ios-info h2 {
+        margin: 0 0 12px;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+      }
+
+      .ios-info p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      @media (max-width: 900px) {
+        .ios-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .ios-ar-button {
+          width: calc(100% - 28px);
+          bottom: 14px;
+        }
+      }
+    </style>
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+  </head>
+  <body>
+    <div class="ios-shell">
+      <div class="ios-note">
+        <p>
+          Su iPhone l'AR si apre con Quick Look. Il modello si posiziona nello spazio
+          reale, mentre i dettagli di batteria, obbiettivo e schermo restano qui
+          nella pagina perche' Safari non supporta le stesse etichette 3D interattive
+          della versione WebXR.
+        </p>
+      </div>
+
+      <div class="ios-ar-viewer">
+        <model-viewer
+          id="ios-viewer"
+          src="./camera.glb"
+          alt="Fotocamera 3D in AR per iPhone"
+          camera-controls
+          ar
+          ar-modes="quick-look"
+          ar-scale="fixed"
+          environment-image="neutral"
+          shadow-intensity="1"
+          camera-orbit="35deg 72deg 140%"
+          camera-target="0m 0.06m 0m"
+        >
+          <button class="ios-ar-button" slot="ar-button" type="button">
+            Apri la fotocamera in AR su iPhone
+          </button>
+        </model-viewer>
+      </div>
+
+      <div class="ios-layout">
+        <section class="poi-grid" aria-label="Punti di interesse">
+          <button class="poi-card is-active" type="button" data-ios-poi="obbiettivo">
+            <strong>Obbiettivo</strong>
+            <span>Elemento frontale che raccoglie la luce e definisce la resa dello scatto.</span>
+          </button>
+
+          <button class="poi-card" type="button" data-ios-poi="schermo">
+            <strong>Schermo</strong>
+            <span>Display posteriore per leggere menu, anteprime e impostazioni.</span>
+          </button>
+
+          <button class="poi-card" type="button" data-ios-poi="batteria">
+            <strong>Batteria</strong>
+            <span>Sorgente di energia della fotocamera, fondamentale per l'autonomia.</span>
+          </button>
+        </section>
+
+        <aside class="ios-info">
+          <p class="panel-kicker" id="ios-kicker">Punto selezionato</p>
+          <h2 id="ios-title">Obbiettivo</h2>
+          <p id="ios-description">
+            L'obbiettivo convoglia la luce verso il sensore e determina nitidezza,
+            profondita' di campo e carattere dell'immagine.
+          </p>
+          <div class="panel-meta">
+            <span id="ios-tag-1">Luce e messa a fuoco</span>
+            <span id="ios-tag-2">Dettagli fuori dall'AR</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <script type="module" src="./ios-ar.js"></script>
+  </body>
+</html>

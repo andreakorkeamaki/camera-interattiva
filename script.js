@@ -8,6 +8,11 @@ const resetButton = document.querySelector("#reset-view");
 const zoomInButton = document.querySelector("#zoom-in");
 const zoomOutButton = document.querySelector("#zoom-out");
 const enterArButton = document.querySelector("#enter-ar");
+const ua = navigator.userAgent || "";
+const isIPhoneSafari =
+  /iPhone|iPad|iPod/i.test(ua) &&
+  /Safari/i.test(ua) &&
+  !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
 
 const hotspots = [...document.querySelectorAll("[data-hotspot]")];
 const poiCards = [...document.querySelectorAll("[data-poi-trigger]")];
@@ -119,7 +124,7 @@ resetButton.addEventListener("click", () => {
 zoomInButton.addEventListener("click", () => adjustZoom(-0.12));
 zoomOutButton.addEventListener("click", () => adjustZoom(0.12));
 enterArButton.addEventListener("click", () => {
-  window.location.href = "./ar.html";
+  window.location.href = isIPhoneSafari ? "./ios-ar.html" : "./ar.html";
 });
 
 viewer.addEventListener("load", () => {
