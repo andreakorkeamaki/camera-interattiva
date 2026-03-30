@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Camera Interattiva 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Esperienza 3D</p>
+          <h1>Esplora la fotocamera con tre punti di interesse interattivi</h1>
+          <p class="intro">
+            Ruota il modello, fai zoom e seleziona i marker per portare la vista
+            davanti a batteria, obbiettivo e schermo con una spiegazione rapida.
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <button class="ghost-button" id="reset-view" type="button">
+            Vista iniziale
+          </button>
+        </div>
+      </header>
+
+      <main class="experience-layout">
+        <section class="viewer-card">
+          <div class="viewer-toolbar">
+            <p>Trascina per ruotare, scorri per zoomare.</p>
+            <div class="toolbar-actions">
+              <button class="toolbar-button" id="zoom-in" type="button">+</button>
+              <button class="toolbar-button" id="zoom-out" type="button">-</button>
+            </div>
+          </div>
+
+          <model-viewer
+            id="camera-viewer"
+            src="./camera.glb"
+            alt="Modello 3D di una fotocamera con punti di interesse"
+            camera-controls
+            touch-action="pan-y"
+            shadow-intensity="1"
+            exposure="1.05"
+            environment-image="neutral"
+            interpolation-decay="180"
+            interaction-prompt="auto"
+            camera-orbit="35deg 72deg 140%"
+            camera-target="0m 0.06m 0m"
+            min-camera-orbit="auto 15deg 70%"
+            max-camera-orbit="auto 150deg 260%"
+            min-field-of-view="18deg"
+            max-field-of-view="38deg"
+          >
+            <button
+              class="hotspot"
+              type="button"
+              slot="hotspot-obbiettivo"
+              data-hotspot="obbiettivo"
+              data-position="0.0019m 0.1044m 0.0637m"
+              data-normal="0m 0m 1m"
+            >
+              <span>Obbiettivo</span>
+            </button>
+
+            <button
+              class="hotspot"
+              type="button"
+              slot="hotspot-schermo"
+              data-hotspot="schermo"
+              data-position="0.0172m 0.0617m -0.1230m"
+              data-normal="0m 0m -1m"
+            >
+              <span>Schermo</span>
+            </button>
+
+            <button
+              class="hotspot"
+              type="button"
+              slot="hotspot-batteria"
+              data-hotspot="batteria"
+              data-position="-0.1068m 0.0463m -0.1063m"
+              data-normal="-1m 0m 0m"
+            >
+              <span>Batteria</span>
+            </button>
+          </model-viewer>
+        </section>
+
+        <aside class="info-panel" id="info-panel" aria-live="polite">
+          <p class="panel-kicker" id="panel-kicker">Punto selezionato</p>
+          <h2 id="panel-title">Obbiettivo</h2>
+          <p id="panel-description">
+            L'obbiettivo raccoglie la luce e definisce nitidezza, profondita' e
+            carattere dell'immagine. Selezionalo per vedere la fotocamera da
+            davanti.
+          </p>
+          <div class="panel-meta">
+            <span id="panel-detail-1">Messa a fuoco e luce</span>
+            <span id="panel-detail-2">Vista ravvicinata guidata</span>
+          </div>
+        </aside>
+      </main>
+
+      <section class="poi-grid" aria-label="Punti di interesse">
+        <button class="poi-card is-active" type="button" data-poi-trigger="obbiettivo">
+          <strong>Obbiettivo</strong>
+          <span>Porta la vista frontalmente sulla lente.</span>
+        </button>
+
+        <button class="poi-card" type="button" data-poi-trigger="schermo">
+          <strong>Schermo</strong>
+          <span>Mostra il display posteriore con i dettagli di lettura.</span>
+        </button>
+
+        <button class="poi-card" type="button" data-poi-trigger="batteria">
+          <strong>Batteria</strong>
+          <span>Si sposta sul lato del corpo macchina e spiega l'alimentazione.</span>
+        </button>
+      </section>
+    </div>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
